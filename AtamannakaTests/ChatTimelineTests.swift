@@ -73,6 +73,27 @@ struct TaskModelTests {
         #expect(try context.fetchCount(FetchDescriptor<Note>()) == 1)
     }
 
+    @Test func メモを削除してもタスクは残り_元に戻すとつながり直す() throws {
+        let container = try SharedStore.makeContainer(inMemory: true)
+        let context = container.mainContext
+        let note = Note(text: "歯医者の予約を取る")
+        context.insert(note)
+        let task = TaskItem(title: note.text, sourceNote: note)
+        context.insert(task)
+        try context.save()
+
+        let snapshot = DeletedNote(note)
+        context.delete(note)
+        try context.save()
+        #expect(task.sourceNote == nil)
+        #expect(try context.fetchCount(FetchDescriptor<TaskItem>()) == 1)
+
+        let restored = snapshot.restore(into: context)
+        try context.save()
+        #expect(restored.task === task)
+        #expect(restored.text == "歯医者の予約を取る")
+    }
+
     @Test func タスクの題名を変えてもメモは変わらない() throws {
         let container = try SharedStore.makeContainer(inMemory: true)
         let context = container.mainContext

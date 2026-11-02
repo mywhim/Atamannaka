@@ -6,6 +6,7 @@ struct ChatView: View {
     @Query(sort: \Note.createdAt) private var notes: [Note]
     /// 書きかけは画面を離れても、アプリを閉じても残す。
     @AppStorage("chat.draft") private var draft = ""
+    @State private var deleted: DeletedNote?
 
     private var rows: [ChatRow<PersistentIdentifier>] {
         ChatTimeline.rows(for: notes.map { ($0.persistentModelID, $0.createdAt) })
@@ -35,6 +36,13 @@ struct ChatView: View {
                                             .tint(.orange)
                                         }
                                     }
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                        Button(role: .destructive) {
+                                            delete(note)
+                                        } label: {
+                                            Label("削除", systemImage: "trash")
+                                        }
+                                    }
                             }
                         }
                     }
@@ -51,8 +59,19 @@ struct ChatView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
-                .onChange(of: notes.count) {
-                    guard let last = rows.last else { return }
+                .overlay(alignment: .bottom) {
+                    if let deleted {
+                        UndoToast(message: "メモを削除しました") { restore(deleted) }
+                    }
+                }
+                .task(id: deleted?.id) {
+                    guard deleted != nil else { return }
+                    try? await Task.sleep(for: .seconds(6))
+                    withAnimation { deleted = nil }
+                }
+                .onChange(of: notes.last?.persistentModelID) {
+                    // 末尾にメモが増えたときだけ下へ送る。削除や元に戻すでは動かさない
+                    guard deleted == nil, let last = rows.last else { return }
                     withAnimation { proxy.scrollTo(last, anchor: .bottom) }
                 }
             }
@@ -74,6 +93,49 @@ struct ChatView: View {
             context.insert(TaskItem(title: note.text, sourceNote: note))
         }
         context.commit()
+    }
+
+    /// メモを消しても、そこから作ったタスクは残す。タスクはもう独り立ちした「やること」なので。
+    private func delete(_ note: Note) {
+        let snapshot = DeletedNote(note)
+        withAnimation {
+            context.delete(note)
+            deleted = snapshot
+        }
+        context.commit(reloadingWidget: false)
+    }
+
+    private func restore(_ snapshot: DeletedNote) {
+        withAnimation {
+            snapshot.restore(into: context)
+            deleted = nil
+        }
+        context.commit(reloadingWidget: false)
+    }
+}
+
+/// 削除を元に戻すために控えておく内容。
+struct DeletedNote: Identifiable {
+    let id = UUID()
+    let text: String
+    let createdAt: Date
+    let task: TaskItem?
+
+    init(_ note: Note) {
+        text = note.text
+        createdAt = note.createdAt
+        task = note.task
+    }
+
+    /// メモを作り直し、タスクがまだ残っていればつなぎ直してハイライトも戻す。
+    @discardableResult
+    func restore(into context: ModelContext) -> Note {
+        let note = Note(text: text, createdAt: createdAt)
+        context.insert(note)
+        if let task, !task.isDeleted, task.sourceNote == nil {
+            task.sourceNote = note
+        }
+        return note
     }
 }
 
