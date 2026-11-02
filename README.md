@@ -106,14 +106,14 @@ xcodebuild test -project Atamannaka.xcodeproj -scheme Atamannaka -destination 'p
 - 署名の有効期限は7日。切れたら Xcode から入れ直す
 - 同時に入れておけるアプリは3つまで
 - アプリとウィジェット拡張で、App ID を2つ使う
-- App Group が無料アカウントで使えるかは、下の「確認の記録」に書く
+- App Group は無料アカウントでも使えた(下の「確認の記録」を参照)
 
 ## 確認の記録
 
 | 項目 | 結果 |
 |---|---|
 | シミュレーターで、App Group の領域に保存されるか | 確認済み(`Atamannaka.store` が App Group 側に作られる) |
-| 無料アカウントの実機署名で、App Group を付けられるか | 未確認 |
+| 無料アカウントの実機署名で、App Group を付けられるか | 確認済み(2026年11月、Xcode 27.0。アプリとウィジェットのプロビジョニングプロファイルに `group.com.yukarii.atamannaka` が入り、iPhone で起動できた) |
 | 実機のウィジェットで、タスクを読めるか | 未確認 |
 
 ## 今後
