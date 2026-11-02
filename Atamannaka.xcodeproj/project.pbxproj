@@ -1,0 +1,622 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		08F05057AC893B779C41E28E /* ChatTimelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27409FEFE244E1C5436416A7 /* ChatTimelineTests.swift */; };
+		34B115D511084DBC12EC545C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B4877225DA872DD5B9FF206F /* Assets.xcassets */; };
+		4D0643857FD8B5195DCA0F9C /* ModelContext+Commit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2C9483630C9634E8596CDA /* ModelContext+Commit.swift */; };
+		4D95409D7E18B45B39B72C40 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF7ECFBA9A032D343E9379F /* ChatView.swift */; };
+		61AE783603263E3E5F9D6F94 /* UndoToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59127BE5D2C1645A0C950D08 /* UndoToast.swift */; };
+		6DFF32272B1AE8A8CD810000 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83EA33C887F319D79DC423 /* Models.swift */; };
+		6FD1E96EA8C947A97EAC9283 /* TaskEditSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E917762DA30B44FD08A903 /* TaskEditSheet.swift */; };
+		7DD62A44B749BBEF40743435 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403011A4794A7BC714DE0871 /* SampleData.swift */; };
+		9A684BA8C079B083E15DD8CD /* ChatTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47AB4ED87EF0EADE3248B1A /* ChatTimeline.swift */; };
+		9CF393C043EEE5812F92DF3A /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E7F754E03B91B86C6A0BF3 /* SharedStore.swift */; };
+		C32ED01410039110A2BF1675 /* ComposerBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546376230DA318C6F6D40C0C /* ComposerBar.swift */; };
+		CF45D4BEC258B8E68631BBA8 /* AtamannakaWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7EE663CD1423E29DDC8F60DA /* AtamannakaWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D8CD149B3D3CCB66A271025A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83EA33C887F319D79DC423 /* Models.swift */; };
+		E13B4DFB0C39098DF543E4A5 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E7F754E03B91B86C6A0BF3 /* SharedStore.swift */; };
+		E95789AB5BAA44A63823C0DB /* AtamannakaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE6028EF7F713AAE5C723C6 /* AtamannakaApp.swift */; };
+		EA632B42436584A2EBDE52E7 /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A9B36CAF54F46C664129F8 /* TaskListView.swift */; };
+		F8DF0FD552C79985F944370B /* TaskWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58ED0F103D367A37F7E72D68 /* TaskWidget.swift */; };
+		FD78E18B004EA9AD9C88CAEB /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2D8700F41851EBB2E3262C /* Formatting.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9E5E1E4FA3BA009BFFADE6F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0291CB34AF7BBD9BAC9E8304 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AE801CE11F5875418D62D43;
+			remoteInfo = Atamannaka;
+		};
+		A973AC5112247FD0E936E87C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0291CB34AF7BBD9BAC9E8304 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 881C76A82B961581F7EB73AF;
+			remoteInfo = AtamannakaWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B1134BF4B696E488418C4FFE /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CF45D4BEC258B8E68631BBA8 /* AtamannakaWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0728013280B3FFE579D7BE01 /* Atamannaka.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Atamannaka.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0C2C9483630C9634E8596CDA /* ModelContext+Commit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelContext+Commit.swift"; sourceTree = "<group>"; };
+		1B608F31A230CD4A36975A37 /* AtamannakaTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = AtamannakaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		27409FEFE244E1C5436416A7 /* ChatTimelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTimelineTests.swift; sourceTree = "<group>"; };
+		27E7F754E03B91B86C6A0BF3 /* SharedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStore.swift; sourceTree = "<group>"; };
+		324DCD27306E2F251161EDDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		403011A4794A7BC714DE0871 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		546376230DA318C6F6D40C0C /* ComposerBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerBar.swift; sourceTree = "<group>"; };
+		58ED0F103D367A37F7E72D68 /* TaskWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskWidget.swift; sourceTree = "<group>"; };
+		59127BE5D2C1645A0C950D08 /* UndoToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoToast.swift; sourceTree = "<group>"; };
+		5EB21534687DB7C8B8608DAA /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
+		64DFFCE63D0451480B0A6196 /* AtamannakaWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AtamannakaWidget.entitlements; sourceTree = "<group>"; };
+		6D2D8700F41851EBB2E3262C /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
+		7EE663CD1423E29DDC8F60DA /* AtamannakaWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = AtamannakaWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BE6028EF7F713AAE5C723C6 /* AtamannakaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtamannakaApp.swift; sourceTree = "<group>"; };
+		A47AB4ED87EF0EADE3248B1A /* ChatTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTimeline.swift; sourceTree = "<group>"; };
+		A8BB51FE443007580261D154 /* Atamannaka.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Atamannaka.entitlements; sourceTree = "<group>"; };
+		B4877225DA872DD5B9FF206F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DB83EA33C887F319D79DC423 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		E3A9B36CAF54F46C664129F8 /* TaskListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListView.swift; sourceTree = "<group>"; };
+		ECF7ECFBA9A032D343E9379F /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		F3E917762DA30B44FD08A903 /* TaskEditSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEditSheet.swift; sourceTree = "<group>"; };
+		F7D8F64A284D15100D50722A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		045325797770A70D75A6AAA3 = {
+			isa = PBXGroup;
+			children = (
+				4F75FC58F396BBE299CACC56 /* Atamannaka */,
+				8AA8B0318244189B7809BF3D /* AtamannakaTests */,
+				5674265626182E03F20CD65E /* AtamannakaWidget */,
+				0B3B209145492957C4CD2B8D /* Configs */,
+				36837D64DF30DE6CE6616C89 /* Shared */,
+				599B81F4EABB0ADF87BB9B04 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0B3B209145492957C4CD2B8D /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				5EB21534687DB7C8B8608DAA /* Signing.xcconfig */,
+			);
+			path = Configs;
+			sourceTree = "<group>";
+		};
+		279D3D8AF5D07C92EFFB253C /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				F3E917762DA30B44FD08A903 /* TaskEditSheet.swift */,
+				E3A9B36CAF54F46C664129F8 /* TaskListView.swift */,
+			);
+			path = Tasks;
+			sourceTree = "<group>";
+		};
+		36837D64DF30DE6CE6616C89 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				DB83EA33C887F319D79DC423 /* Models.swift */,
+				27E7F754E03B91B86C6A0BF3 /* SharedStore.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		386797B980BED0AEAAB23626 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				6D2D8700F41851EBB2E3262C /* Formatting.swift */,
+				0C2C9483630C9634E8596CDA /* ModelContext+Commit.swift */,
+				403011A4794A7BC714DE0871 /* SampleData.swift */,
+				59127BE5D2C1645A0C950D08 /* UndoToast.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		4F75FC58F396BBE299CACC56 /* Atamannaka */ = {
+			isa = PBXGroup;
+			children = (
+				B4877225DA872DD5B9FF206F /* Assets.xcassets */,
+				A8BB51FE443007580261D154 /* Atamannaka.entitlements */,
+				9BE6028EF7F713AAE5C723C6 /* AtamannakaApp.swift */,
+				324DCD27306E2F251161EDDE /* Info.plist */,
+				E18228DCD161183615057246 /* Chat */,
+				386797B980BED0AEAAB23626 /* Common */,
+				279D3D8AF5D07C92EFFB253C /* Tasks */,
+			);
+			path = Atamannaka;
+			sourceTree = "<group>";
+		};
+		5674265626182E03F20CD65E /* AtamannakaWidget */ = {
+			isa = PBXGroup;
+			children = (
+				64DFFCE63D0451480B0A6196 /* AtamannakaWidget.entitlements */,
+				F7D8F64A284D15100D50722A /* Info.plist */,
+				58ED0F103D367A37F7E72D68 /* TaskWidget.swift */,
+			);
+			path = AtamannakaWidget;
+			sourceTree = "<group>";
+		};
+		599B81F4EABB0ADF87BB9B04 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0728013280B3FFE579D7BE01 /* Atamannaka.app */,
+				1B608F31A230CD4A36975A37 /* AtamannakaTests.xctest */,
+				7EE663CD1423E29DDC8F60DA /* AtamannakaWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8AA8B0318244189B7809BF3D /* AtamannakaTests */ = {
+			isa = PBXGroup;
+			children = (
+				27409FEFE244E1C5436416A7 /* ChatTimelineTests.swift */,
+			);
+			path = AtamannakaTests;
+			sourceTree = "<group>";
+		};
+		E18228DCD161183615057246 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				A47AB4ED87EF0EADE3248B1A /* ChatTimeline.swift */,
+				ECF7ECFBA9A032D343E9379F /* ChatView.swift */,
+				546376230DA318C6F6D40C0C /* ComposerBar.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		881C76A82B961581F7EB73AF /* AtamannakaWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E91991D337D574831B5CF331 /* Build configuration list for PBXNativeTarget "AtamannakaWidget" */;
+			buildPhases = (
+				7F0F94CC9E2093AA5C1074B5 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AtamannakaWidget;
+			packageProductDependencies = (
+			);
+			productName = AtamannakaWidget;
+			productReference = 7EE663CD1423E29DDC8F60DA /* AtamannakaWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		8AE801CE11F5875418D62D43 /* Atamannaka */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E6B434CD6FB29CBD8DD404CF /* Build configuration list for PBXNativeTarget "Atamannaka" */;
+			buildPhases = (
+				F10ABBAE8403F2590F19713D /* Sources */,
+				ED0A94EAFE66187FD4879568 /* Resources */,
+				B1134BF4B696E488418C4FFE /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				523FC25C4B5D15892F0BB0D4 /* PBXTargetDependency */,
+			);
+			name = Atamannaka;
+			packageProductDependencies = (
+			);
+			productName = Atamannaka;
+			productReference = 0728013280B3FFE579D7BE01 /* Atamannaka.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F16511B522173B6F60BE744E /* AtamannakaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D192B2FC533F342F416FE4E2 /* Build configuration list for PBXNativeTarget "AtamannakaTests" */;
+			buildPhases = (
+				80DF05B6720D9DF35217782D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A59D17967DF102C5C32F1994 /* PBXTargetDependency */,
+			);
+			name = AtamannakaTests;
+			packageProductDependencies = (
+			);
+			productName = AtamannakaTests;
+			productReference = 1B608F31A230CD4A36975A37 /* AtamannakaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0291CB34AF7BBD9BAC9E8304 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					881C76A82B961581F7EB73AF = {
+						ProvisioningStyle = Automatic;
+					};
+					8AE801CE11F5875418D62D43 = {
+						ProvisioningStyle = Automatic;
+					};
+					F16511B522173B6F60BE744E = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = D94959750F3C1AE115E15B67 /* Build configuration list for PBXProject "Atamannaka" */;
+			developmentRegion = ja;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				ja,
+			);
+			mainGroup = 045325797770A70D75A6AAA3;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 599B81F4EABB0ADF87BB9B04 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8AE801CE11F5875418D62D43 /* Atamannaka */,
+				881C76A82B961581F7EB73AF /* AtamannakaWidget */,
+				F16511B522173B6F60BE744E /* AtamannakaTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		ED0A94EAFE66187FD4879568 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34B115D511084DBC12EC545C /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7F0F94CC9E2093AA5C1074B5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6DFF32272B1AE8A8CD810000 /* Models.swift in Sources */,
+				9CF393C043EEE5812F92DF3A /* SharedStore.swift in Sources */,
+				F8DF0FD552C79985F944370B /* TaskWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80DF05B6720D9DF35217782D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				08F05057AC893B779C41E28E /* ChatTimelineTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F10ABBAE8403F2590F19713D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E95789AB5BAA44A63823C0DB /* AtamannakaApp.swift in Sources */,
+				9A684BA8C079B083E15DD8CD /* ChatTimeline.swift in Sources */,
+				4D95409D7E18B45B39B72C40 /* ChatView.swift in Sources */,
+				C32ED01410039110A2BF1675 /* ComposerBar.swift in Sources */,
+				FD78E18B004EA9AD9C88CAEB /* Formatting.swift in Sources */,
+				4D0643857FD8B5195DCA0F9C /* ModelContext+Commit.swift in Sources */,
+				D8CD149B3D3CCB66A271025A /* Models.swift in Sources */,
+				7DD62A44B749BBEF40743435 /* SampleData.swift in Sources */,
+				E13B4DFB0C39098DF543E4A5 /* SharedStore.swift in Sources */,
+				6FD1E96EA8C947A97EAC9283 /* TaskEditSheet.swift in Sources */,
+				EA632B42436584A2EBDE52E7 /* TaskListView.swift in Sources */,
+				61AE783603263E3E5F9D6F94 /* UndoToast.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		523FC25C4B5D15892F0BB0D4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 881C76A82B961581F7EB73AF /* AtamannakaWidget */;
+			targetProxy = A973AC5112247FD0E936E87C /* PBXContainerItemProxy */;
+		};
+		A59D17967DF102C5C32F1994 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AE801CE11F5875418D62D43 /* Atamannaka */;
+			targetProxy = 9E5E1E4FA3BA009BFFADE6F3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		581B419E41DCDBC4CD4B87BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Atamannaka/Atamannaka.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Atamannaka/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yukarii.atamannaka;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		61CADF93AD42D8760A3609A2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AtamannakaWidget/AtamannakaWidget.entitlements;
+				INFOPLIST_FILE = AtamannakaWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yukarii.atamannaka.widget;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		675599BECB53BB8CB37C5BCC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yukarii.atamannaka.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Atamannaka.app/Atamannaka";
+			};
+			name = Release;
+		};
+		67C29CF352C31DEC7F9734CE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5EB21534687DB7C8B8608DAA /* Signing.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		6920D936CA6EEAD52FA5C54E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Atamannaka/Atamannaka.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Atamannaka/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yukarii.atamannaka;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		720DED44F8EA4829454F8E53 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yukarii.atamannaka.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Atamannaka.app/Atamannaka";
+			};
+			name = Debug;
+		};
+		BF2B0EFE2254979D8D7C7B69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AtamannakaWidget/AtamannakaWidget.entitlements;
+				INFOPLIST_FILE = AtamannakaWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yukarii.atamannaka.widget;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		C7B1D643F0ECD5C06ACC7D3A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5EB21534687DB7C8B8608DAA /* Signing.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D192B2FC533F342F416FE4E2 /* Build configuration list for PBXNativeTarget "AtamannakaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				720DED44F8EA4829454F8E53 /* Debug */,
+				675599BECB53BB8CB37C5BCC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D94959750F3C1AE115E15B67 /* Build configuration list for PBXProject "Atamannaka" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7B1D643F0ECD5C06ACC7D3A /* Debug */,
+				67C29CF352C31DEC7F9734CE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E6B434CD6FB29CBD8DD404CF /* Build configuration list for PBXNativeTarget "Atamannaka" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6920D936CA6EEAD52FA5C54E /* Debug */,
+				581B419E41DCDBC4CD4B87BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E91991D337D574831B5CF331 /* Build configuration list for PBXNativeTarget "AtamannakaWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF2B0EFE2254979D8D7C7B69 /* Debug */,
+				61CADF93AD42D8760A3609A2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0291CB34AF7BBD9BAC9E8304 /* Project object */;
+}

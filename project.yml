@@ -1,0 +1,86 @@
+name: Atamannaka
+options:
+  bundleIdPrefix: com.yukarii
+  deploymentTarget:
+    iOS: "18.0"
+  developmentLanguage: ja
+configFiles:
+  Debug: Configs/Signing.xcconfig
+  Release: Configs/Signing.xcconfig
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    CODE_SIGN_STYLE: Automatic
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  Atamannaka:
+    type: application
+    platform: iOS
+    sources:
+      - Atamannaka
+      - Shared
+    entitlements:
+      path: Atamannaka/Atamannaka.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.yukarii.atamannaka
+    info:
+      path: Atamannaka/Info.plist
+      properties:
+        CFBundleDisplayName: あたまんなか
+        CFBundleDevelopmentRegion: ja
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        CFBundleURLTypes:
+          - CFBundleURLName: com.yukarii.atamannaka
+            CFBundleURLSchemes:
+              - atamannaka
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yukarii.atamannaka
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    dependencies:
+      - target: AtamannakaWidget
+  AtamannakaWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - AtamannakaWidget
+      - Shared
+    entitlements:
+      path: AtamannakaWidget/AtamannakaWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.yukarii.atamannaka
+    info:
+      path: AtamannakaWidget/Info.plist
+      properties:
+        CFBundleDisplayName: あたまんなか
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yukarii.atamannaka.widget
+        TARGETED_DEVICE_FAMILY: "1"
+  AtamannakaTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - AtamannakaTests
+    dependencies:
+      - target: Atamannaka
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yukarii.atamannaka.tests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  Atamannaka:
+    build:
+      targets:
+        Atamannaka: all
+    test:
+      targets:
+        - AtamannakaTests
