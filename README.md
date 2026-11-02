@@ -114,7 +114,7 @@ xcodebuild test -project Atamannaka.xcodeproj -scheme Atamannaka -destination 'p
 |---|---|
 | シミュレーターで、App Group の領域に保存されるか | 確認済み(`Atamannaka.store` が App Group 側に作られる) |
 | 無料アカウントの実機署名で、App Group を付けられるか | 確認済み(2026年11月、Xcode 27.0。アプリとウィジェットのプロビジョニングプロファイルに `group.com.yukarii.atamannaka` が入り、iPhone で起動できた) |
-| 実機のウィジェットで、タスクを読めるか | 未確認 |
+| 実機のウィジェットで、タスクを読めるか | 確認済み(iPhone のホーム画面のウィジェットに、アプリで作ったタスクが表示された) |
 
 ## 今後
 
