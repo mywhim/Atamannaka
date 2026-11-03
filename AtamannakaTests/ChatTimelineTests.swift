@@ -94,6 +94,27 @@ struct TaskModelTests {
         #expect(restored.text == "歯医者の予約を取る")
     }
 
+    @Test func タスク解除を元に戻すとメモとつながり直す() throws {
+        let container = try SharedStore.makeContainer(inMemory: true)
+        let context = container.mainContext
+        let note = Note(text: "スライド")
+        context.insert(note)
+        let task = TaskItem(title: "ゼミの発表スライドを作る", sourceNote: note, sortIndex: 3)
+        context.insert(task)
+        try context.save()
+
+        let snapshot = DeletedTask(task)
+        context.delete(task)
+        try context.save()
+        #expect(note.task == nil)
+
+        let restored = snapshot.restore(into: context)
+        try context.save()
+        #expect(note.task === restored)
+        #expect(restored.title == "ゼミの発表スライドを作る")
+        #expect(restored.sortIndex == 3)
+    }
+
     @Test func タスクの題名を変えてもメモは変わらない() throws {
         let container = try SharedStore.makeContainer(inMemory: true)
         let context = container.mainContext
@@ -106,6 +127,17 @@ struct TaskModelTests {
         #expect(note.text == "スライド")
     }
 
+    @Test func 並べ替えた順番を作成順より優先する() throws {
+        let container = try SharedStore.makeContainer(inMemory: true)
+        let context = container.mainContext
+        let now = Date.now
+        context.insert(TaskItem(title: "古いが下", createdAt: now.addingTimeInterval(-60), sortIndex: 1))
+        context.insert(TaskItem(title: "新しいが上", createdAt: now, sortIndex: 0))
+        try context.save()
+        #expect(try context.fetch(TaskItem.openTasks).map(\.title) == ["新しいが上", "古いが下"])
+        #expect(TaskItem.nextSortIndex(in: context) == 2)
+    }
+
     @Test func 未完了のタスクだけを古い順に取り出す() throws {
         let container = try SharedStore.makeContainer(inMemory: true)
         let context = container.mainContext
@@ -115,5 +147,35 @@ struct TaskModelTests {
         context.insert(TaskItem(title: "完了", createdAt: now.addingTimeInterval(-120), completedAt: now))
         try context.save()
         #expect(try context.fetch(TaskItem.openTasks).map(\.title) == ["古い", "新しい"])
+    }
+}
+
+struct WidgetHighlightTests {
+    /// 毎回同じ結果になる乱数。テストを再現できるようにする。
+    struct SeededGenerator: RandomNumberGenerator {
+        var state: UInt64
+        mutating func next() -> UInt64 {
+            state &+= 0x9E37_79B9_7F4A_7C15
+            var z = state
+            z = (z ^ (z >> 30)) &* 0xBF58_476D_1CE4_E5B9
+            z = (z ^ (z >> 27)) &* 0x94D0_49BB_1331_11EB
+            return z ^ (z >> 31)
+        }
+    }
+
+    @Test(arguments: [2, 3, 6])
+    func 同じ行が続けて選ばれない(rowCount: Int) {
+        var generator = SeededGenerator(state: 42)
+        let indices = WidgetHighlight.indices(rowCount: rowCount, length: 200, using: &generator).compactMap { $0 }
+        #expect(indices.count == 200)
+        #expect(indices.allSatisfy { (0..<rowCount).contains($0) })
+        #expect(zip(indices, indices.dropFirst()).allSatisfy { $0 != $1 })
+        #expect(Set(indices).count == rowCount)
+    }
+
+    @Test func タスクが1件ならその行だけ_なければ色を敷かない() {
+        var generator = SeededGenerator(state: 1)
+        #expect(WidgetHighlight.indices(rowCount: 1, length: 3, using: &generator) == [0, 0, 0])
+        #expect(WidgetHighlight.indices(rowCount: 0, length: 2, using: &generator) == [nil, nil])
     }
 }

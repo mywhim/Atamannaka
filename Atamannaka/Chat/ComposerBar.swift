@@ -14,7 +14,9 @@ struct ComposerBar: View {
                 .font(.system(size: 17))
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                .background(Color(.secondarySystemBackground), in: .rect(cornerRadius: 18))
+                // 枠線を付けて、下の帯の灰色から入力欄だけが浮いて見えるようにする
+                .background(Color(.systemBackground), in: .rect(cornerRadius: 18))
+                .overlay(RoundedRectangle(cornerRadius: 18).stroke(Color(.systemGray3), lineWidth: 1))
                 .accessibilityLabel("メモ")
 
             Button {
@@ -34,6 +36,7 @@ struct ComposerBar: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
-        .background(.bar)
+        .background(Color(.systemGray6))
+        .overlay(alignment: .top) { Divider() }
     }
 }

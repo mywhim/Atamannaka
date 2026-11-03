@@ -3,9 +3,9 @@ import SwiftUI
 
 struct TaskListView: View {
     @Environment(\.modelContext) private var context
-    @Query(sort: \TaskItem.createdAt) private var tasks: [TaskItem]
+    @Query(sort: TaskItem.listOrder) private var tasks: [TaskItem]
     @State private var editing: TaskItem?
-    @State private var deleted: DeletedTask?
+    @State private var pendingUndo: PendingUndo?
 
     private var openTasks: [TaskItem] { tasks.filter { !$0.isDone } }
     /// 完了したものは、最近完了した順に下へ薄く残す。
@@ -18,10 +18,19 @@ struct TaskListView: View {
             List {
                 Section {
                     ForEach(openTasks) { row(for: $0) }
+                        // 長押しして上下に動かす。ウィジェットもこの順で上から表示する
+                        .onMove(perform: move)
                 }
                 if !doneTasks.isEmpty {
-                    Section("完了") {
+                    Section {
                         ForEach(doneTasks) { row(for: $0) }
+                    } header: {
+                        HStack {
+                            Text("完了")
+                            Spacer()
+                            Button("完了したタスクを削除", role: .destructive, action: deleteDone)
+                                .font(.footnote)
+                        }
                     }
                 }
             }
@@ -35,16 +44,7 @@ struct TaskListView: View {
                     )
                 }
             }
-            .overlay(alignment: .bottom) {
-                if let deleted {
-                    UndoToast(message: "タスクを削除しました") { restore(deleted) }
-                }
-            }
-            .task(id: deleted?.id) {
-                guard deleted != nil else { return }
-                try? await Task.sleep(for: .seconds(6))
-                withAnimation { deleted = nil }
-            }
+            .undoToast($pendingUndo)
             .sheet(item: $editing) { TaskEditSheet(task: $0) }
             .navigationTitle("タスク")
             .navigationBarTitleDisplayMode(.inline)
@@ -78,7 +78,7 @@ struct TaskListView: View {
         .listRowInsets(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 16))
         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
             Button(role: .destructive) {
-                delete(task)
+                delete([task], message: "タスクを削除しました")
             } label: {
                 Label("削除", systemImage: "trash")
             }
@@ -92,41 +92,32 @@ struct TaskListView: View {
         context.commit()
     }
 
-    private func delete(_ task: TaskItem) {
-        let snapshot = DeletedTask(task)
-        withAnimation {
-            context.delete(task)
-            deleted = snapshot
+    /// 動かした結果の並びどおりに、未完了のタスクへ番号を振り直す。
+    private func move(from source: IndexSet, to destination: Int) {
+        var reordered = openTasks
+        reordered.move(fromOffsets: source, toOffset: destination)
+        for (index, task) in reordered.enumerated() {
+            task.sortIndex = Double(index)
         }
         context.commit()
     }
 
-    private func restore(_ snapshot: DeletedTask) {
+    private func deleteDone() {
+        let done = doneTasks
+        delete(done, message: "完了したタスクを\(done.count)件削除しました")
+    }
+
+    private func delete(_ targets: [TaskItem], message: String) {
+        let snapshots = targets.map(DeletedTask.init)
         withAnimation {
-            context.insert(snapshot.makeTask())
-            deleted = nil
+            targets.forEach(context.delete)
         }
         context.commit()
-    }
-}
-
-/// 削除を元に戻すために控えておく内容。削除した TaskItem 自体は使えなくなるので値で持つ。
-private struct DeletedTask: Identifiable {
-    let id = UUID()
-    let title: String
-    let createdAt: Date
-    let completedAt: Date?
-    let sourceNote: Note?
-
-    init(_ task: TaskItem) {
-        title = task.title
-        createdAt = task.createdAt
-        completedAt = task.completedAt
-        sourceNote = task.sourceNote
-    }
-
-    func makeTask() -> TaskItem {
-        let note = sourceNote?.isDeleted == false ? sourceNote : nil
-        return TaskItem(title: title, createdAt: createdAt, completedAt: completedAt, sourceNote: note)
+        pendingUndo = PendingUndo(message: message) { [context] in
+            withAnimation {
+                snapshots.forEach { $0.restore(into: context) }
+            }
+            context.commit()
+        }
     }
 }

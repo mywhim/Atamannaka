@@ -6,7 +6,7 @@ struct ChatView: View {
     @Query(sort: \Note.createdAt) private var notes: [Note]
     /// 書きかけは画面を離れても、アプリを閉じても残す。
     @AppStorage("chat.draft") private var draft = ""
-    @State private var deleted: DeletedNote?
+    @State private var pendingUndo: PendingUndo?
 
     private var rows: [ChatRow<PersistentIdentifier>] {
         ChatTimeline.rows(for: notes.map { ($0.persistentModelID, $0.createdAt) })
@@ -26,6 +26,7 @@ struct ChatView: View {
                         case .note(let id):
                             if let note = byID[id] {
                                 NoteRow(note: note)
+                                    // タスクのタブは右隣にあるので、右へスワイプしてタスクにする。同じ動作で解除もできる
                                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
                                         if note.task == nil {
                                             Button {
@@ -34,6 +35,13 @@ struct ChatView: View {
                                                 Label("タスクにする", systemImage: "checklist")
                                             }
                                             .tint(.orange)
+                                        } else {
+                                            Button {
+                                                removeTask(from: note)
+                                            } label: {
+                                                Label("タスク解除", systemImage: "xmark")
+                                            }
+                                            .tint(.gray)
                                         }
                                     }
                                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
@@ -59,19 +67,10 @@ struct ChatView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
-                .overlay(alignment: .bottom) {
-                    if let deleted {
-                        UndoToast(message: "メモを削除しました") { restore(deleted) }
-                    }
-                }
-                .task(id: deleted?.id) {
-                    guard deleted != nil else { return }
-                    try? await Task.sleep(for: .seconds(6))
-                    withAnimation { deleted = nil }
-                }
+                .undoToast($pendingUndo)
                 .onChange(of: notes.last?.persistentModelID) {
                     // 末尾にメモが増えたときだけ下へ送る。削除や元に戻すでは動かさない
-                    guard deleted == nil, let last = rows.last else { return }
+                    guard pendingUndo == nil, let last = rows.last else { return }
                     withAnimation { proxy.scrollTo(last, anchor: .bottom) }
                 }
             }
@@ -90,33 +89,37 @@ struct ChatView: View {
 
     private func makeTask(from note: Note) {
         withAnimation {
-            context.insert(TaskItem(title: note.text, sourceNote: note))
+            context.insert(TaskItem(title: note.text, sourceNote: note, sortIndex: TaskItem.nextSortIndex(in: context)))
         }
         context.commit()
+    }
+
+    /// タスクを消してハイライトを外す。題名を直していることもあるので、元に戻せるようにする。
+    private func removeTask(from note: Note) {
+        guard let task = note.task else { return }
+        let snapshot = DeletedTask(task)
+        withAnimation { context.delete(task) }
+        context.commit()
+        pendingUndo = PendingUndo(message: "タスクを解除しました") { [context] in
+            withAnimation { snapshot.restore(into: context) }
+            context.commit()
+        }
     }
 
     /// メモを消しても、そこから作ったタスクは残す。タスクはもう独り立ちした「やること」なので。
     private func delete(_ note: Note) {
         let snapshot = DeletedNote(note)
-        withAnimation {
-            context.delete(note)
-            deleted = snapshot
-        }
+        withAnimation { context.delete(note) }
         context.commit(reloadingWidget: false)
-    }
-
-    private func restore(_ snapshot: DeletedNote) {
-        withAnimation {
-            snapshot.restore(into: context)
-            deleted = nil
+        pendingUndo = PendingUndo(message: "メモを削除しました") { [context] in
+            withAnimation { snapshot.restore(into: context) }
+            context.commit(reloadingWidget: false)
         }
-        context.commit(reloadingWidget: false)
     }
 }
 
 /// 削除を元に戻すために控えておく内容。
-struct DeletedNote: Identifiable {
-    let id = UUID()
+struct DeletedNote {
     let text: String
     let createdAt: Date
     let task: TaskItem?
@@ -143,9 +146,11 @@ private struct DayHeader: View {
     let date: Date
 
     var body: some View {
+        // 時刻と同じく右に寄せる
         Text(date.dayText)
             .font(.caption.bold())
             .foregroundStyle(.secondary)
+            .frame(maxWidth: .infinity, alignment: .trailing)
             .listRowInsets(EdgeInsets(top: 10, leading: 16, bottom: 2, trailing: 16))
             .listRowSeparator(.hidden)
             .accessibilityAddTraits(.isHeader)
@@ -164,14 +169,20 @@ private struct GapLine: View {
 }
 
 /// 吹き出しを使わず、本文と追加時刻だけを並べる。
+/// タスクにしたメモは行全体に色を敷き、タスクを完了したら本文に取り消し線を引く。
 private struct NoteRow: View {
     let note: Note
 
+    private var isTask: Bool { note.task != nil }
+    private var isDone: Bool { note.task?.isDone == true }
+
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 14) {
-            Text(highlightedText)
+            Text(note.text)
                 .font(.system(size: 17))
                 .lineSpacing(4)
+                .strikethrough(isDone)
+                .foregroundStyle(isDone ? .secondary : .primary)
                 .frame(maxWidth: .infinity, alignment: .leading)
             Text(note.createdAt.clockText)
                 .font(.system(size: 11.5, design: .monospaced))
@@ -179,16 +190,8 @@ private struct NoteRow: View {
         }
         .listRowInsets(EdgeInsets(top: 7, leading: 16, bottom: 7, trailing: 16))
         .listRowSeparator(.hidden)
+        .listRowBackground(isTask ? Color.marker : nil)
         .accessibilityElement(children: .combine)
-        .accessibilityValue(note.task == nil ? "" : "タスク")
-    }
-
-    /// 行ごとに色が付く蛍光ペン風のハイライトにするため、背景ではなく文字の属性として付ける。
-    private var highlightedText: AttributedString {
-        var text = AttributedString(note.text)
-        if note.task != nil {
-            text.backgroundColor = .marker
-        }
-        return text
+        .accessibilityValue(isDone ? "完了したタスク" : isTask ? "タスク" : "")
     }
 }
