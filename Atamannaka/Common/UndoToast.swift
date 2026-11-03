@@ -43,7 +43,7 @@ private struct UndoToast: View {
         .foregroundStyle(.primary)
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
-        .background(Color(.systemGray5), in: .rect(cornerRadius: 10))
+        .background(Color(.systemGray3), in: .rect(cornerRadius: 10))
         .padding(.bottom, 12)
     }
 }

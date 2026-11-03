@@ -26,8 +26,9 @@ struct ChatView: View {
                         case .note(let id):
                             if let note = byID[id] {
                                 NoteRow(note: note)
-                                    // タスクのタブは右隣にあるので、右へスワイプしてタスクにする。同じ動作で解除もできる
-                                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                                    // タスクのタブは右隣にあるので、右へスワイプしてタスクにする。同じ動作で解除もできる。
+                                    // 解除は直した題名などが消えるので、スワイプしきっただけでは実行せず、ボタンを押してもらう
+                                    .swipeActions(edge: .leading, allowsFullSwipe: note.task == nil) {
                                         if note.task == nil {
                                             Button {
                                                 makeTask(from: note)
@@ -94,16 +95,11 @@ struct ChatView: View {
         context.commit()
     }
 
-    /// タスクを消してハイライトを外す。題名を直していることもあるので、元に戻せるようにする。
+    /// タスクを消して、メモの行の色を外す。
     private func removeTask(from note: Note) {
         guard let task = note.task else { return }
-        let snapshot = DeletedTask(task)
         withAnimation { context.delete(task) }
         context.commit()
-        pendingUndo = PendingUndo(message: "タスクを解除しました") { [context] in
-            withAnimation { snapshot.restore(into: context) }
-            context.commit()
-        }
     }
 
     /// メモを消しても、そこから作ったタスクは残す。タスクはもう独り立ちした「やること」なので。
@@ -190,7 +186,8 @@ private struct NoteRow: View {
         }
         .listRowInsets(EdgeInsets(top: 7, leading: 16, bottom: 7, trailing: 16))
         .listRowSeparator(.hidden)
-        .listRowBackground(isTask ? Color.marker : nil)
+        // 上下を少し空けて、タスクのメモが続いても1行ずつ分かれて見えるようにする
+        .listRowBackground(isTask ? Color.marker.padding(.vertical, 2) : nil)
         .accessibilityElement(children: .combine)
         .accessibilityValue(isDone ? "完了したタスク" : isTask ? "タスク" : "")
     }

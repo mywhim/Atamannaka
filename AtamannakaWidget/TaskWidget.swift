@@ -121,7 +121,7 @@ struct TaskWidgetView: View {
                 .padding(.horizontal, 5)
                 .padding(.vertical, 2)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(index == highlight ? Color.marker : .clear, in: .rect(cornerRadius: 4))
+                .background(index == highlight ? Color.widgetHighlight : .clear, in: .rect(cornerRadius: 4))
             }
         }
     }
