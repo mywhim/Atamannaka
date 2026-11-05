@@ -255,7 +255,7 @@ private struct GapLine: View {
 }
 
 /// 吹き出しを使わず、本文と追加時刻だけを並べる。
-/// タスクにしたメモは行全体に色を敷き、タスクを完了したら本文に取り消し線を引く。
+/// タスクにしたメモは左にオレンジのバーを付け、タスクを完了したらバーを灰色にして本文に取り消し線を引く。
 private struct NoteRow: View {
     let note: Note
 
@@ -276,9 +276,25 @@ private struct NoteRow: View {
         }
         .listRowInsets(EdgeInsets(top: 7, leading: 16, bottom: 7, trailing: 16))
         .listRowSeparator(.hidden)
-        // 上下を少し空けて、タスクのメモが続いても1行ずつ分かれて見えるようにする
-        .listRowBackground(isTask ? Color.marker.padding(.vertical, 2) : nil)
+        .listRowBackground(isTask ? TaskBar(color: isDone ? .doneTaskBar : .taskBar) : nil)
         .accessibilityElement(children: .combine)
         .accessibilityValue(isDone ? "完了したタスク" : isTask ? "タスク" : "")
+    }
+}
+
+/// メモの左に縦に付けるバー。上下を少し空けて、タスクのメモが続いても1件ずつ分かれて見えるようにする。
+private struct TaskBar: View {
+    let color: Color
+
+    var body: some View {
+        HStack(spacing: 0) {
+            RoundedRectangle(cornerRadius: 2)
+                .fill(color)
+                .frame(width: 4)
+                .padding(.vertical, 5)
+                .padding(.leading, 6)
+            Spacer(minLength: 0)
+        }
+        .background(Color(.systemBackground))
     }
 }

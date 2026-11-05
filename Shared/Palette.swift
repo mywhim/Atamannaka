@@ -2,9 +2,11 @@ import SwiftUI
 import UIKit
 
 extension Color {
-    /// チャットでタスクにしたメモの行に敷く色。
-    /// #FC9325 を半透明にして敷く。背景が透けるので、明るい画面でも暗い画面でも同じ色の指定で文字が読める。
-    static let marker = Color(red: 0xfc / 255, green: 0x93 / 255, blue: 0x25 / 255).opacity(0.3)
+    /// チャットでタスクにしたメモの左に付けるバーの色。#FC9325 を不透明度 80% で使う。
+    static let taskBar = Color(red: 0xfc / 255, green: 0x93 / 255, blue: 0x25 / 255).opacity(0.8)
+
+    /// 完了したタスクのバーの色。taskBar と同じ明るさ(#FC9325 とほぼ同じ明度の #ABABAB)の灰色にして、色みだけを抜いている。
+    static let doneTaskBar = Color(red: 0xab / 255, green: 0xab / 255, blue: 0xab / 255).opacity(0.8)
 
     /// ウィジェットで、読んでもらいたい1行に敷く色。蛍光ペンのような黄色にしている。
     static let widgetHighlight = Color(UIColor { traits in
