@@ -85,39 +85,47 @@ struct TaskWidgetView: View {
     let entry: TaskEntry
 
     var body: some View {
-        Group {
-            if !entry.canReadAppData {
-                message("アプリのデータを読めません")
-            } else if entry.titles.isEmpty {
-                message("タスクはありません")
-            } else {
-                // 入りきらないときは、残りの件数を出さずに入るところまでだけ並べる
-                ViewThatFits(in: .vertical) {
-                    ForEach((1...entry.titles.count).reversed(), id: \.self) { count in
-                        rows(count)
-                    }
+        // 入る件数ぶんの枠を上下の中央に置き、その中でタスクを上から並べる。
+        // 件数が少ないときも、いっぱいのときと同じ位置から始まる
+        ViewThatFits(in: .vertical) {
+            ForEach((1...WidgetHighlight.maxRows).reversed(), id: \.self) { capacity in
+                ZStack(alignment: .topLeading) {
+                    rows(Array(repeating: "あ", count: capacity), highlight: nil)
+                        .hidden()
+                    content(capacity: capacity)
                 }
             }
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
-        // 上下の余白をそろえて、タスクがウィジェットの中央に来るようにする
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .containerBackground(.background, for: .widget)
         .widgetURL(AppLink.tasks)
     }
 
-    private func rows(_ count: Int) -> some View {
-        // 入りきらず行を減らしたときも、色を敷く行が消えないようにする
-        let highlight = entry.highlight.map { $0 % count }
-        return VStack(alignment: .leading, spacing: 2) {
-            ForEach(0..<count, id: \.self) { index in
+    @ViewBuilder
+    private func content(capacity: Int) -> some View {
+        if !entry.canReadAppData {
+            message("アプリのデータを読めません")
+        } else if entry.titles.isEmpty {
+            message("タスクはありません")
+        } else {
+            // 入りきらないときは、残りの件数を出さずに入るところまでだけ並べる。
+            // 減らしたときも、色を敷く行が消えないようにする
+            let shown = Array(entry.titles.prefix(capacity))
+            rows(shown, highlight: entry.highlight.map { $0 % shown.count })
+        }
+    }
+
+    private func rows(_ titles: [String], highlight: Int?) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            ForEach(Array(titles.enumerated()), id: \.offset) { index, title in
                 HStack(alignment: .firstTextBaseline, spacing: 5) {
                     Image(systemName: "circle")
                         .font(.system(size: 8))
                         .foregroundStyle(.secondary)
-                    Text(entry.titles[index])
-                        // 小・中サイズの高さに、5件が余裕をもって収まる大きさ。入りきらない件数は ViewThatFits が減らす
+                    Text(title)
+                        // 小・中サイズの高さに、5件が余裕をもって収まる大きさ
                         .font(.system(size: 16))
                         .lineLimit(1)
                 }
