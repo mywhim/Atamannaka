@@ -9,8 +9,8 @@ enum WidgetHighlight {
     static let interval: TimeInterval = 15 * 60
     /// 一度に作っておく予定の数。使い切るとシステムが次の予定を求めてくる。
     static let entryCount = 24
-    /// ウィジェットに並べる最大の件数。
-    static let maxRows = 6
+    /// ウィジェットのために読み込む最大の件数。大サイズの高さに入る件数より少し多めにしておく。
+    static let maxRows = 14
 
     /// 時刻ごとに目立たせる行の番号を決める。同じ行が続けて選ばれないようにする。
     /// - Returns: タスクがないときは nil の並び。

@@ -43,7 +43,8 @@ struct TaskProvider: TimelineProvider {
             return
         }
         var generator = SystemRandomNumberGenerator()
-        let highlight = WidgetHighlight.indices(rowCount: titles.count, length: 1, using: &generator)[0]
+        let rowCount = min(titles.count, visibleRows(for: context.family))
+        let highlight = WidgetHighlight.indices(rowCount: rowCount, length: 1, using: &generator)[0]
         completion(TaskEntry(date: .now, titles: titles, highlight: highlight, canReadAppData: true))
     }
 
@@ -55,7 +56,9 @@ struct TaskProvider: TimelineProvider {
             return
         }
         var generator = SystemRandomNumberGenerator()
-        let indices = WidgetHighlight.indices(rowCount: titles.count, length: WidgetHighlight.entryCount, using: &generator)
+        // 色を敷く行は、そのサイズで見えている行の中から選ぶ
+        let rowCount = min(titles.count, visibleRows(for: context.family))
+        let indices = WidgetHighlight.indices(rowCount: rowCount, length: WidgetHighlight.entryCount, using: &generator)
         let start = Date.now
         let entries = indices.enumerated().map { step, highlight in
             TaskEntry(
@@ -66,6 +69,11 @@ struct TaskProvider: TimelineProvider {
             )
         }
         completion(Timeline(entries: entries, policy: titles.count > 1 ? .atEnd : .never))
+    }
+
+    /// そのサイズに 16pt の行が入る件数のめやす。実際に入りきらない分は表示側で減らす。
+    private func visibleRows(for family: WidgetFamily) -> Int {
+        family == .systemLarge ? 13 : 5
     }
 
     private var unreadable: TaskEntry {
@@ -85,36 +93,36 @@ struct TaskWidgetView: View {
     let entry: TaskEntry
 
     var body: some View {
-        // 入る件数ぶんの枠を上下の中央に置き、その中でタスクを上から並べる。
-        // 件数が少ないときも、いっぱいのときと同じ位置から始まる
-        ViewThatFits(in: .vertical) {
-            ForEach((1...WidgetHighlight.maxRows).reversed(), id: \.self) { capacity in
-                ZStack(alignment: .topLeading) {
-                    rows(Array(repeating: "あ", count: capacity), highlight: nil)
-                        .hidden()
-                    content(capacity: capacity)
+        Group {
+            if !entry.canReadAppData {
+                message("アプリのデータを読めません")
+            } else if entry.titles.isEmpty {
+                message("タスクはありません")
+            } else {
+                // 高さに入る件数ぶんの枠を上下の中央に置き、その中でタスクを上から並べる。
+                // 件数が少ないときも、いっぱいのときと同じ位置から始まる
+                ViewThatFits(in: .vertical) {
+                    ForEach((1...WidgetHighlight.maxRows).reversed(), id: \.self) { capacity in
+                        ZStack(alignment: .topLeading) {
+                            rows(Array(repeating: "あ", count: capacity), highlight: nil)
+                                .hidden()
+                            taskRows(capacity: capacity)
+                        }
+                    }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             }
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .containerBackground(.background, for: .widget)
         .widgetURL(AppLink.tasks)
     }
 
-    @ViewBuilder
-    private func content(capacity: Int) -> some View {
-        if !entry.canReadAppData {
-            message("アプリのデータを読めません")
-        } else if entry.titles.isEmpty {
-            message("タスクはありません")
-        } else {
-            // 入りきらないときは、残りの件数を出さずに入るところまでだけ並べる。
-            // 減らしたときも、色を敷く行が消えないようにする
-            let shown = Array(entry.titles.prefix(capacity))
-            rows(shown, highlight: entry.highlight.map { $0 % shown.count })
-        }
+    /// 入りきらないときは、残りの件数を出さずに入るところまでだけ並べる。減らしたときも、色を敷く行が消えないようにする。
+    private func taskRows(capacity: Int) -> some View {
+        let shown = Array(entry.titles.prefix(capacity))
+        return rows(shown, highlight: entry.highlight.map { $0 % shown.count })
     }
 
     private func rows(_ titles: [String], highlight: Int?) -> some View {
