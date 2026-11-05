@@ -248,14 +248,14 @@ private struct GapLine: View {
         Rectangle()
             .fill(Color(.separator))
             .frame(height: 1)
-            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+            .listRowInsets(EdgeInsets(top: 4, leading: ChatLayout.textLeading, bottom: 4, trailing: 16))
             .listRowSeparator(.hidden)
             .accessibilityHidden(true)
     }
 }
 
 /// 吹き出しを使わず、本文と追加時刻だけを並べる。
-/// タスクにしたメモは左にオレンジのバーを付け、タスクを完了したらバーを灰色にして本文に取り消し線を引く。
+/// タスクにしたメモは左にオレンジのバーを付け、タスクを完了したらバーを灰色にして本文を薄くする。
 private struct NoteRow: View {
     let note: Note
 
@@ -267,19 +267,24 @@ private struct NoteRow: View {
             Text(note.text)
                 .font(.system(size: 17))
                 .lineSpacing(4)
-                .strikethrough(isDone)
                 .foregroundStyle(isDone ? .secondary : .primary)
                 .frame(maxWidth: .infinity, alignment: .leading)
             Text(note.createdAt.clockText)
                 .font(.system(size: 11.5, design: .monospaced))
                 .foregroundStyle(.secondary)
         }
-        .listRowInsets(EdgeInsets(top: 7, leading: 16, bottom: 7, trailing: 16))
+        .listRowInsets(EdgeInsets(top: 7, leading: ChatLayout.textLeading, bottom: 7, trailing: 16))
         .listRowSeparator(.hidden)
         .listRowBackground(isTask ? TaskBar(color: isDone ? .doneTaskBar : .taskBar) : nil)
         .accessibilityElement(children: .combine)
         .accessibilityValue(isDone ? "完了したタスク" : isTask ? "タスク" : "")
     }
+}
+
+/// チャットの左側の余白。本文の左にバーを置くので、ほかの画面より少し広く取る。
+private enum ChatLayout {
+    static let barLeading: CGFloat = 10
+    static let textLeading: CGFloat = 26
 }
 
 /// メモの左に縦に付けるバー。上下を少し空けて、タスクのメモが続いても1件ずつ分かれて見えるようにする。
@@ -292,7 +297,7 @@ private struct TaskBar: View {
                 .fill(color)
                 .frame(width: 4)
                 .padding(.vertical, 5)
-                .padding(.leading, 6)
+                .padding(.leading, ChatLayout.barLeading)
             Spacer(minLength: 0)
         }
         .background(Color(.systemBackground))
