@@ -3,12 +3,8 @@ import UIKit
 
 extension Color {
     /// チャットでタスクにしたメモの行に敷く色。
-    /// 明るい画面では #FC9325。暗い画面では文字が白くなるので、白い文字が読める濃さまで落としている。
-    static let marker = Color(UIColor { traits in
-        traits.userInterfaceStyle == .dark
-            ? UIColor(red: 0xa8 / 255, green: 0x5a / 255, blue: 0x0c / 255, alpha: 1)
-            : UIColor(red: 0xfc / 255, green: 0x93 / 255, blue: 0x25 / 255, alpha: 1)
-    })
+    /// #FC9325 を半透明にして敷く。背景が透けるので、明るい画面でも暗い画面でも同じ色の指定で文字が読める。
+    static let marker = Color(red: 0xfc / 255, green: 0x93 / 255, blue: 0x25 / 255).opacity(0.4)
 
     /// ウィジェットで、読んでもらいたい1行に敷く色。蛍光ペンのような黄色にしている。
     static let widgetHighlight = Color(UIColor { traits in
