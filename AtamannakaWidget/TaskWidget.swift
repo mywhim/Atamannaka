@@ -99,7 +99,8 @@ struct TaskWidgetView: View {
                 }
             }
         }
-        .padding(12)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .containerBackground(.background, for: .widget)
         .widgetURL(AppLink.tasks)
@@ -115,7 +116,8 @@ struct TaskWidgetView: View {
                         .font(.system(size: 8))
                         .foregroundStyle(.secondary)
                     Text(entry.titles[index])
-                        .font(.footnote)
+                        // 小・中サイズの高さに、ちょうど5件が収まる大きさ。入りきらない件数は ViewThatFits が減らす
+                        .font(.system(size: 17))
                         .lineLimit(1)
                 }
                 .padding(.horizontal, 5)

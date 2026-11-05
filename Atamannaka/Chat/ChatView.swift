@@ -75,7 +75,8 @@ struct ChatView: View {
                     withAnimation { proxy.scrollTo(last, anchor: .bottom) }
                 }
             }
-            .safeAreaInset(edge: .bottom, spacing: 0) {
+            // 最後のメモが入力欄に張り付かないよう、少し間を空ける
+            .safeAreaInset(edge: .bottom, spacing: 12) {
                 ComposerBar(text: $draft, onSend: add)
             }
             .navigationTitle("ひとりチャット")
@@ -158,7 +159,7 @@ private struct GapLine: View {
         Rectangle()
             .fill(Color(.separator))
             .frame(height: 1)
-            .listRowInsets(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
+            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
             .listRowSeparator(.hidden)
             .accessibilityHidden(true)
     }
