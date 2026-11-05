@@ -6,14 +6,19 @@ struct AtamannakaApp: App {
     let container: ModelContainer
 
     init() {
+        let arguments = ProcessInfo.processInfo.arguments
         do {
-            container = try SharedStore.makeContainer()
+            // -inMemory は動作確認用。端末に保存してあるデータには触れずに、使い捨てのデータで起動する
+            container = try SharedStore.makeContainer(inMemory: arguments.contains("-inMemory"))
         } catch {
             fatalError("保存先を開けませんでした: \(error)")
         }
         #if DEBUG
-        if ProcessInfo.processInfo.arguments.contains("-seedSample") {
+        if arguments.contains("-seedSample") {
             SampleData.insertIfEmpty(into: container.mainContext)
+        }
+        if arguments.contains("-seedMany") {
+            SampleData.insertNumbered(1200, into: container.mainContext)
         }
         #endif
     }

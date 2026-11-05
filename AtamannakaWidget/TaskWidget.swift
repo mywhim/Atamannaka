@@ -101,7 +101,8 @@ struct TaskWidgetView: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        // 上下の余白をそろえて、タスクがウィジェットの中央に来るようにする
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .containerBackground(.background, for: .widget)
         .widgetURL(AppLink.tasks)
     }
@@ -116,8 +117,8 @@ struct TaskWidgetView: View {
                         .font(.system(size: 8))
                         .foregroundStyle(.secondary)
                     Text(entry.titles[index])
-                        // 小・中サイズの高さに、ちょうど5件が収まる大きさ。入りきらない件数は ViewThatFits が減らす
-                        .font(.system(size: 17))
+                        // 小・中サイズの高さに、5件が余裕をもって収まる大きさ。入りきらない件数は ViewThatFits が減らす
+                        .font(.system(size: 16))
                         .lineLimit(1)
                 }
                 .padding(.horizontal, 5)

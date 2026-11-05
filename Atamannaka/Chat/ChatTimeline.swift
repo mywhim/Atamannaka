@@ -11,6 +11,8 @@ enum ChatRow<ID: Hashable>: Hashable {
 enum ChatTimeline {
     /// この間隔以上あいたメモの間に線を引く。
     static let gapInterval: TimeInterval = 5 * 60
+    /// チャット画面で一度に読み込むメモの件数。
+    static let pageSize = 500
 
     /// - Parameter entries: 作成時刻の古い順に並んだメモ。
     static func rows<ID: Hashable>(

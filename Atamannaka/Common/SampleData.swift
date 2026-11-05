@@ -27,5 +27,15 @@ enum SampleData {
         context.insert(TaskItem(title: notes[5].text, createdAt: at(1442), completedAt: at(1500), sourceNote: notes[5]))
         context.commit()
     }
+
+    /// 読み込み件数の確認用。1分おきに「メモ 1」から番号付きのメモを作る。
+    @MainActor
+    static func insertNumbered(_ count: Int, into context: ModelContext) {
+        let start = Date.now.addingTimeInterval(-Double(count) * 60)
+        for number in 1...count {
+            context.insert(Note(text: "メモ \(number)", createdAt: start.addingTimeInterval(Double(number) * 60)))
+        }
+        context.commit(reloadingWidget: false)
+    }
 }
 #endif
