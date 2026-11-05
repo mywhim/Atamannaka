@@ -55,7 +55,11 @@ struct RootView: View {
             }
         }
         .onOpenURL { url in
-            if url == AppLink.tasks { tab = .tasks }
+            switch url {
+            case AppLink.tasks: tab = .tasks
+            case AppLink.chat: tab = .chat
+            default: break
+            }
         }
     }
 }

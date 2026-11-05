@@ -6,6 +6,7 @@ import WidgetKit
 struct AtamannakaWidgetBundle: WidgetBundle {
     var body: some Widget {
         TaskWidget()
+        ChatWidget()
     }
 }
 

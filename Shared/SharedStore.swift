@@ -29,4 +29,5 @@ enum SharedStore {
 
 enum AppLink {
     static let tasks = URL(string: "atamannaka://tasks")!
+    static let chat = URL(string: "atamannaka://chat")!
 }

@@ -22,6 +22,7 @@
 		9A684BA8C079B083E15DD8CD /* ChatTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47AB4ED87EF0EADE3248B1A /* ChatTimeline.swift */; };
 		9CF393C043EEE5812F92DF3A /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E7F754E03B91B86C6A0BF3 /* SharedStore.swift */; };
 		C32ED01410039110A2BF1675 /* ComposerBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546376230DA318C6F6D40C0C /* ComposerBar.swift */; };
+		CBD5CAB4A663151C3884FD75 /* ChatWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A6C27D7DA72A2D700ECA6C /* ChatWidget.swift */; };
 		CF45D4BEC258B8E68631BBA8 /* AtamannakaWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7EE663CD1423E29DDC8F60DA /* AtamannakaWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D8CD149B3D3CCB66A271025A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83EA33C887F319D79DC423 /* Models.swift */; };
 		E13B4DFB0C39098DF543E4A5 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E7F754E03B91B86C6A0BF3 /* SharedStore.swift */; };
@@ -82,6 +83,7 @@
 		9BE6028EF7F713AAE5C723C6 /* AtamannakaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtamannakaApp.swift; sourceTree = "<group>"; };
 		A47AB4ED87EF0EADE3248B1A /* ChatTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTimeline.swift; sourceTree = "<group>"; };
 		A8BB51FE443007580261D154 /* Atamannaka.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Atamannaka.entitlements; sourceTree = "<group>"; };
+		B3A6C27D7DA72A2D700ECA6C /* ChatWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWidget.swift; sourceTree = "<group>"; };
 		B4877225DA872DD5B9FF206F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DB83EA33C887F319D79DC423 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		DECFD3E3D07CED29B15C9628 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				64DFFCE63D0451480B0A6196 /* AtamannakaWidget.entitlements */,
+				B3A6C27D7DA72A2D700ECA6C /* ChatWidget.swift */,
 				F7D8F64A284D15100D50722A /* Info.plist */,
 				58ED0F103D367A37F7E72D68 /* TaskWidget.swift */,
 			);
@@ -312,6 +315,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBD5CAB4A663151C3884FD75 /* ChatWidget.swift in Sources */,
 				6DFF32272B1AE8A8CD810000 /* Models.swift in Sources */,
 				27AEC959B7B15DF4BFA233FA /* Palette.swift in Sources */,
 				9CF393C043EEE5812F92DF3A /* SharedStore.swift in Sources */,
