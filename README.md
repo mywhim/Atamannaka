@@ -6,6 +6,15 @@
 
 Web 版の試作(HTML/JavaScript)で使い心地を確かめてから、SwiftUI で作り直しました。
 
+<p>
+  <img src="docs/images/chat.png" alt="ひとりチャットの画面。メモが時刻とともに並び、タスクにしたメモの左にオレンジのバーが付いている" width="240">
+  <img src="docs/images/tasks.png" alt="タスク一覧の画面。未完了のタスクが上に、完了したタスクが下に薄く並んでいる" width="240">
+  <img src="docs/images/chat-dark.png" alt="ダークモードのひとりチャットの画面" width="240">
+</p>
+<p>
+  <img src="docs/images/widgets.png" alt="ホーム画面のウィジェット。左はタスクのウィジェットで1行に黄色が敷かれ、右はひとりチャットを開くウィジェット" width="480">
+</p>
+
 ## 機能
 
 | 画面 | できること |
@@ -151,3 +160,7 @@ xcodebuild test -project Atamannaka.xcodeproj -scheme Atamannaka -destination 'p
 ## 今後
 
 - ブレインストーミング画面(Web 版の試作にあるもの)
+
+## ライセンス
+
+[MIT License](LICENSE)
