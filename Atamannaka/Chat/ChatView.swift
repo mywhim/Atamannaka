@@ -2,6 +2,8 @@ import SwiftData
 import SwiftUI
 
 struct ChatView: View {
+    /// 値が変わると、入力欄にカーソルを入れる。
+    var composeRequest: UUID?
     @Environment(\.modelContext) private var context
     /// 書きかけは画面を離れても、アプリを閉じても残す。
     @AppStorage("chat.draft") private var draft = ""
@@ -15,7 +17,7 @@ struct ChatView: View {
             VStack(spacing: 0) {
                 NoteList(limit: $limit, pendingUndo: $pendingUndo)
                     .undoToast($pendingUndo)
-                ComposerBar(text: $draft, onSend: add)
+                ComposerBar(text: $draft, focusRequest: composeRequest, onSend: add)
             }
             .navigationTitle("ひとりチャット")
             .navigationBarTitleDisplayMode(.inline)

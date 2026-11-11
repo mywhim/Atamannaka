@@ -44,11 +44,13 @@ struct RootView: View {
         #endif
         return .chat
     }()
+    /// ウィジェットから開いたときに、入力欄にカーソルを入れるための合図。開くたびに新しい値にする。
+    @State private var composeRequest: UUID?
 
     var body: some View {
         TabView(selection: $tab) {
             Tab("チャット", systemImage: "text.alignleft", value: AppTab.chat) {
-                ChatView()
+                ChatView(composeRequest: composeRequest)
             }
             Tab("タスク", systemImage: "checklist", value: AppTab.tasks) {
                 TaskListView()
@@ -57,7 +59,10 @@ struct RootView: View {
         .onOpenURL { url in
             switch url {
             case AppLink.tasks: tab = .tasks
-            case AppLink.chat: tab = .chat
+            case AppLink.chat:
+                // 思いついたことをすぐ書けるよう、開いたら入力欄にカーソルを入れる
+                tab = .chat
+                composeRequest = UUID()
             default: break
             }
         }
