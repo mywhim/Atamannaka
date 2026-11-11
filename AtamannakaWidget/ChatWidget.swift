@@ -36,7 +36,9 @@ struct ChatWidgetView: View {
     var body: some View {
         Group {
             if family == .accessoryCircular {
-                // ロック画面では単色で描かれるので、アイコンから取り出した「あ!」の形だけを使う
+                // ロック画面では単色で描かれるので、アイコンから取り出した「あ!」の形だけを使う。
+                // ウィジェットで使える画像の大きさには上限があり、超えると何も描かれない。
+                // そのため画像は、表示する大きさ(3倍の解像度)に合わせて小さくしてある
                 ZStack {
                     AccessoryWidgetBackground()
                     Image("ChatMark")
