@@ -16,6 +16,11 @@ struct TaskListView: View {
     }()
 
     private var isEditing: Bool { editMode.isEditing }
+    /// 並べ替えの処理。編集中は nil にして、つまみ(三本線)を出さない。
+    private var moveAction: ((IndexSet, Int) -> Void)? {
+        if isEditing { return nil }
+        return { source, destination in move(from: source, to: destination) }
+    }
 
     private var openTasks: [TaskItem] { tasks.filter { !$0.isDone } }
     /// 完了したものは、最近完了した順に下へ薄く残す。
@@ -28,8 +33,9 @@ struct TaskListView: View {
             List {
                 Section {
                     ForEach(openTasks) { row(for: $0) }
-                        // 長押しして上下に動かす。ウィジェットもこの順で上から表示する
-                        .onMove(perform: move)
+                        // 長押しして上下に動かす。ウィジェットもこの順で上から表示する。
+                        // 編集中は並べ替えのつまみ(三本線)が出て画面がくどくなるので、並べ替えはふだんの表示だけにする
+                        .onMove(perform: moveAction)
                         .onDelete { offsets in delete(offsets.map { openTasks[$0] }, message: "タスクを削除しました") }
                 }
                 if !doneTasks.isEmpty {
@@ -79,27 +85,28 @@ struct TaskListView: View {
     }
 
     /// ふだんは行のどこを押しても完了と未完了が切り替わる。
-    /// 編集中は、左に出る削除ボタン(マイナス)と文の変更ボタン(紙と鉛筆)で操作し、行を押しても完了は切り替えない。
+    /// 編集中は、左に出る削除ボタン(マイナス)と右に出る文の変更ボタン(紙と鉛筆)で操作し、行を押しても完了は切り替えない。
     @ViewBuilder
     private func row(for task: TaskItem) -> some View {
         if isEditing {
             HStack(spacing: 4) {
+                Text(task.title)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 11)
                 Button {
                     editing = task
                 } label: {
                     Image(systemName: "square.and.pencil")
                         .font(.title3)
-                        .foregroundStyle(.tint)
+                        .foregroundStyle(.secondary)
                         .frame(width: 44, height: 44)
                         .contentShape(.rect)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel("文を変更")
-                Text(task.title)
-                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             .opacity(task.isDone ? 0.45 : 1)
-            .listRowInsets(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 16))
+            .listRowInsets(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 8))
         } else {
             Button {
                 toggle(task)
