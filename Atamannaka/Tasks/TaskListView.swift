@@ -6,6 +6,16 @@ struct TaskListView: View {
     @Query(sort: TaskItem.listOrder) private var tasks: [TaskItem]
     @State private var editing: TaskItem?
     @State private var pendingUndo: PendingUndo?
+    /// 右上の「編集」で切り替える。編集中は各タスクの左に、削除と文の変更のボタンが出る。
+    @State private var editMode: EditMode = {
+        #if DEBUG
+        // スクリーンショット用。起動引数 -editTasks で、編集中の状態から始める
+        if ProcessInfo.processInfo.arguments.contains("-editTasks") { return .active }
+        #endif
+        return .inactive
+    }()
+
+    private var isEditing: Bool { editMode.isEditing }
 
     private var openTasks: [TaskItem] { tasks.filter { !$0.isDone } }
     /// 完了したものは、最近完了した順に下へ薄く残す。
@@ -20,10 +30,12 @@ struct TaskListView: View {
                     ForEach(openTasks) { row(for: $0) }
                         // 長押しして上下に動かす。ウィジェットもこの順で上から表示する
                         .onMove(perform: move)
+                        .onDelete { offsets in delete(offsets.map { openTasks[$0] }, message: "タスクを削除しました") }
                 }
                 if !doneTasks.isEmpty {
                     Section {
                         ForEach(doneTasks) { row(for: $0) }
+                            .onDelete { offsets in delete(offsets.map { doneTasks[$0] }, message: "タスクを削除しました") }
                     } header: {
                         HStack {
                             Text("完了")
@@ -35,6 +47,21 @@ struct TaskListView: View {
                 }
             }
             .listStyle(.plain)
+            .environment(\.editMode, $editMode)
+            .toolbar {
+                // 文の変更と削除のボタンを全部の行に出すと画面がくどくなるので、右上の1か所から出し入れする
+                if !tasks.isEmpty {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(isEditing ? "完了" : "編集") {
+                            withAnimation { editMode = isEditing ? .inactive : .active }
+                        }
+                        .fontWeight(isEditing ? .bold : .regular)
+                    }
+                }
+            }
+            .onChange(of: tasks.isEmpty) {
+                if tasks.isEmpty { editMode = .inactive }
+            }
             .overlay {
                 if tasks.isEmpty {
                     ContentUnavailableView(
@@ -51,9 +78,29 @@ struct TaskListView: View {
         }
     }
 
-    /// 行のどこを押しても完了と未完了が切り替わる。文の変更と削除は、右端の編集ボタンから選ぶ。
+    /// ふだんは行のどこを押しても完了と未完了が切り替わる。
+    /// 編集中は、左に出る削除ボタン(マイナス)と文の変更ボタン(紙と鉛筆)で操作し、行を押しても完了は切り替えない。
+    @ViewBuilder
     private func row(for task: TaskItem) -> some View {
-        HStack(spacing: 4) {
+        if isEditing {
+            HStack(spacing: 4) {
+                Button {
+                    editing = task
+                } label: {
+                    Image(systemName: "square.and.pencil")
+                        .font(.title3)
+                        .foregroundStyle(.tint)
+                        .frame(width: 44, height: 44)
+                        .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("文を変更")
+                Text(task.title)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .opacity(task.isDone ? 0.45 : 1)
+            .listRowInsets(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 16))
+        } else {
             Button {
                 toggle(task)
             } label: {
@@ -70,36 +117,8 @@ struct TaskListView: View {
             .accessibilityLabel(task.title)
             .accessibilityValue(task.isDone ? "完了" : "未完了")
             .accessibilityHint(task.isDone ? "未完了に戻します" : "完了にします")
-
-            Menu {
-                Button {
-                    editing = task
-                } label: {
-                    Label("文を変更", systemImage: "pencil")
-                }
-                Button(role: .destructive) {
-                    delete([task], message: "タスクを削除しました")
-                } label: {
-                    Label("削除", systemImage: "trash")
-                }
-            } label: {
-                Image(systemName: "ellipsis.circle")
-                    .font(.title3)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 44, height: 44)
-                    .contentShape(.rect)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("編集")
-        }
-        .opacity(task.isDone ? 0.45 : 1)
-        .listRowInsets(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 8))
-        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-            Button(role: .destructive) {
-                delete([task], message: "タスクを削除しました")
-            } label: {
-                Label("削除", systemImage: "trash")
-            }
+            .opacity(task.isDone ? 0.45 : 1)
+            .listRowInsets(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 16))
         }
     }
 
