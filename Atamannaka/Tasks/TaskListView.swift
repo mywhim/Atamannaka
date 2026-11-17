@@ -51,31 +51,49 @@ struct TaskListView: View {
         }
     }
 
+    /// 行のどこを押しても完了と未完了が切り替わる。文の変更と削除は、右端の編集ボタンから選ぶ。
     private func row(for task: TaskItem) -> some View {
         HStack(spacing: 4) {
             Button {
                 toggle(task)
             } label: {
-                Image(systemName: task.isDone ? "checkmark.circle.fill" : "circle")
-                    .font(.title2)
+                HStack(spacing: 4) {
+                    Image(systemName: task.isDone ? "checkmark.circle.fill" : "circle")
+                        .font(.title2)
+                        .frame(width: 44, height: 44)
+                    Text(task.title)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .contentShape(.rect)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(task.title)
+            .accessibilityValue(task.isDone ? "完了" : "未完了")
+            .accessibilityHint(task.isDone ? "未完了に戻します" : "完了にします")
+
+            Menu {
+                Button {
+                    editing = task
+                } label: {
+                    Label("文を変更", systemImage: "pencil")
+                }
+                Button(role: .destructive) {
+                    delete([task], message: "タスクを削除しました")
+                } label: {
+                    Label("削除", systemImage: "trash")
+                }
+            } label: {
+                Image(systemName: "ellipsis.circle")
+                    .font(.title3)
+                    .foregroundStyle(.secondary)
                     .frame(width: 44, height: 44)
                     .contentShape(.rect)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(task.isDone ? "未完了に戻す" : "完了にする")
-
-            Button {
-                editing = task
-            } label: {
-                Text(task.title)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(.rect)
-            }
-            .buttonStyle(.plain)
-            .accessibilityHint("編集します")
+            .accessibilityLabel("編集")
         }
         .opacity(task.isDone ? 0.45 : 1)
-        .listRowInsets(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 16))
+        .listRowInsets(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 8))
         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
             Button(role: .destructive) {
                 delete([task], message: "タスクを削除しました")
