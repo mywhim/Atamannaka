@@ -6,16 +6,17 @@ struct TaskListView: View {
     @Query(sort: TaskItem.listOrder) private var tasks: [TaskItem]
     @State private var editing: TaskItem?
     @State private var pendingUndo: PendingUndo?
-    /// 右上の「編集」で切り替える。編集中は各タスクの左に、削除と文の変更のボタンが出る。
-    @State private var editMode: EditMode = {
+    /// 右上の「編集」で切り替える。編集中は各タスクの左に削除ボタン、右に文の変更ボタンが出る。
+    ///
+    /// iOS 標準の編集モード(EditMode)は、行の左に削除ボタンの場所を差し込んで文字を横にずらし、切り替えにも動きが付く。
+    /// ここでは文字を動かさないよう、標準の編集モードは使わず、行の左右にいつも同じ幅の場所を取っておいて中身だけを入れ替える。
+    @State private var isEditing: Bool = {
         #if DEBUG
         // スクリーンショット用。起動引数 -editTasks で、編集中の状態から始める
-        if ProcessInfo.processInfo.arguments.contains("-editTasks") { return .active }
+        if ProcessInfo.processInfo.arguments.contains("-editTasks") { return true }
         #endif
-        return .inactive
+        return false
     }()
-
-    private var isEditing: Bool { editMode.isEditing }
     /// 並べ替えの処理。編集中は nil にして、つまみ(三本線)を出さない。
     private var moveAction: ((IndexSet, Int) -> Void)? {
         if isEditing { return nil }
@@ -53,20 +54,19 @@ struct TaskListView: View {
                 }
             }
             .listStyle(.plain)
-            .environment(\.editMode, $editMode)
             .toolbar {
                 // 文の変更と削除のボタンを全部の行に出すと画面がくどくなるので、右上の1か所から出し入れする
                 if !tasks.isEmpty {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button(isEditing ? "完了" : "編集") {
-                            withAnimation { editMode = isEditing ? .inactive : .active }
+                            isEditing.toggle()
                         }
                         .fontWeight(isEditing ? .bold : .regular)
                     }
                 }
             }
             .onChange(of: tasks.isEmpty) {
-                if tasks.isEmpty { editMode = .inactive }
+                if tasks.isEmpty { isEditing = false }
             }
             .overlay {
                 if tasks.isEmpty {
@@ -85,48 +85,62 @@ struct TaskListView: View {
     }
 
     /// ふだんは行のどこを押しても完了と未完了が切り替わる。
-    /// 編集中は、左に出る削除ボタン(マイナス)と右に出る文の変更ボタン(紙と鉛筆)で操作し、行を押しても完了は切り替えない。
-    @ViewBuilder
+    /// 編集中は、左の削除ボタン(マイナス)と右の文の変更ボタン(紙と鉛筆)で操作し、行を押しても完了は切り替えない。
+    /// 左右の場所の幅は編集中もふだんも同じなので、切り替えても文字の位置と折り返しは変わらない。
     private func row(for task: TaskItem) -> some View {
-        if isEditing {
-            HStack(spacing: 4) {
-                Text(task.title)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 11)
-                Button {
-                    editing = task
-                } label: {
-                    Image(systemName: "square.and.pencil")
-                        .font(.title3)
-                        .foregroundStyle(.secondary)
-                        .frame(width: 44, height: 44)
-                        .contentShape(.rect)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("文を変更")
-            }
-            .opacity(task.isDone ? 0.45 : 1)
-            .listRowInsets(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 8))
-        } else {
-            Button {
-                toggle(task)
-            } label: {
-                HStack(spacing: 4) {
+        HStack(spacing: 4) {
+            Group {
+                if isEditing {
+                    Button {
+                        delete([task], message: "タスクを削除しました")
+                    } label: {
+                        Image(systemName: "minus.circle.fill")
+                            .font(.title2)
+                            .foregroundStyle(.white, .red)
+                            .frame(width: 44, height: 44)
+                            .contentShape(.rect)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("削除")
+                } else {
                     Image(systemName: task.isDone ? "checkmark.circle.fill" : "circle")
                         .font(.title2)
                         .frame(width: 44, height: 44)
-                    Text(task.title)
-                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .contentShape(.rect)
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel(task.title)
-            .accessibilityValue(task.isDone ? "完了" : "未完了")
-            .accessibilityHint(task.isDone ? "未完了に戻します" : "完了にします")
-            .opacity(task.isDone ? 0.45 : 1)
-            .listRowInsets(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 16))
+            Text(task.title)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Group {
+                if isEditing {
+                    Button {
+                        editing = task
+                    } label: {
+                        Image(systemName: "square.and.pencil")
+                            .font(.title3)
+                            .foregroundStyle(.secondary)
+                            .frame(width: 44, height: 44)
+                            .contentShape(.rect)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("文を変更")
+                } else {
+                    Color.clear
+                        .frame(width: 44, height: 44)
+                        .accessibilityHidden(true)
+                }
+            }
         }
+        .opacity(task.isDone ? 0.45 : 1)
+        .contentShape(.rect)
+        .onTapGesture {
+            if !isEditing { toggle(task) }
+        }
+        .accessibilityElement(children: isEditing ? .contain : .ignore)
+        .accessibilityLabel(isEditing ? "" : task.title)
+        .accessibilityValue(isEditing ? "" : (task.isDone ? "完了" : "未完了"))
+        .accessibilityHint(isEditing ? "" : (task.isDone ? "未完了に戻します" : "完了にします"))
+        .accessibilityAddTraits(isEditing ? [] : .isButton)
+        .listRowInsets(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 8))
     }
 
     private func toggle(_ task: TaskItem) {
