@@ -85,7 +85,7 @@ struct TaskListView: View {
     }
 
     /// ふだんは行のどこを押しても完了と未完了が切り替わる。
-    /// 編集中は、左の削除ボタン(マイナス)と右の文の変更ボタン(紙と鉛筆)で操作し、行を押しても完了は切り替えない。
+    /// 編集中は、左の削除ボタン(マイナス)と右の文の変更ボタン(ペン)で操作し、行を押しても完了は切り替えない。
     /// 左右の場所の幅は編集中もふだんも同じなので、切り替えても文字の位置と折り返しは変わらない。
     private func row(for task: TaskItem) -> some View {
         HStack(spacing: 4) {
@@ -115,7 +115,7 @@ struct TaskListView: View {
                     Button {
                         editing = task
                     } label: {
-                        Image(systemName: "square.and.pencil")
+                        Image(systemName: "pencil")
                             .font(.title3)
                             .foregroundStyle(.secondary)
                             .frame(width: 44, height: 44)

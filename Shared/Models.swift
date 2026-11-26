@@ -7,7 +7,7 @@ final class Note {
     var text: String
     var createdAt: Date
 
-    /// このメモから作ったタスク。タスクを削除すると nil に戻り、ハイライトも消える。
+    /// このメモから作ったタスク。タスクを削除すると nil に戻り、メモの左のバーも消える。
     @Relationship(deleteRule: .nullify, inverse: \TaskItem.sourceNote)
     var task: TaskItem?
 

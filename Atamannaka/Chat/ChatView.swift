@@ -218,7 +218,7 @@ struct DeletedNote {
         task = note.task
     }
 
-    /// メモを作り直し、タスクがまだ残っていればつなぎ直してハイライトも戻す。
+    /// メモを作り直し、タスクがまだ残っていればつなぎ直して左のバーも戻す。
     @discardableResult
     func restore(into context: ModelContext) -> Note {
         let note = Note(text: text, createdAt: createdAt)

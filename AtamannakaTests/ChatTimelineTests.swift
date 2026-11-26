@@ -57,7 +57,7 @@ struct ChatTimelineTests {
 
 @MainActor
 struct TaskModelTests {
-    @Test func タスクを削除するとメモのハイライトが外れる() throws {
+    @Test func タスクを削除するとメモの左のバーが外れる() throws {
         let container = try SharedStore.makeContainer(inMemory: true)
         let context = container.mainContext
         let note = Note(text: "歯医者の予約を取る")
